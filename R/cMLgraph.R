@@ -1,4 +1,3 @@
-# source('MRcML-C.R')
 Graph_Screen <- function(b_mat, se_mat, n_vec, IV_list = NULL, R_list, rho_mat, c_vec = rep(1, length(n_vec)), sig.cutoff = 5e-08) {
   n_trait <- length(n_vec)
   N_combination <- n_trait * (n_trait - 1) / 2
@@ -162,6 +161,8 @@ Graph_Estimate <- function(b_mat, se_mat, n_vec, rho_mat, IJ_snp_list = NULL, t,
       k <- k + 1
     }
   }
+
+  diag(obs_graph) <- 0
   dir_graph <- obs_graph %*% solve(diag(n_trait) + obs_graph)
 
   out <- list()
