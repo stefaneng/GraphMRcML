@@ -1,10 +1,9 @@
-source('MRcML-C.R')
 Graph_Screen <- function(b_mat,se_mat,n_vec,IV_list,R_list,rho_mat,c_vec=rep(1,length(n_vec)),sig.cutoff=5e-08){
   n_trait = length(n_vec)
   N_combination = n_trait * (n_trait - 1) / 2
   if(length(IV_list)!=N_combination){stop("The length of IV_list must be equal to N_combination!")}
   m_block = length(R_list) ## LD blocks
-  if(sum(unlist(lapply(R_list,function(x){nrow(x$R)})))!=nrow(b_mat)){stop("LD matrix must contain all SNPs used in the analysis!")}
+  if(!is.null(R_list) && sum(unlist(lapply(R_list,function(x){nrow(x$R)})))!=nrow(b_mat)){stop("LD matrix must contain all SNPs used in the analysis!")}
 
   IJ_snp_list = vector("list", N_combination)
   k = 1
@@ -50,7 +49,7 @@ Graph_Screen <- function(b_mat,se_mat,n_vec,IV_list,R_list,rho_mat,c_vec=rep(1,l
 ### End of screening 1 ###
 ### Screening for LD of b_mat ###
   DP_mat_list = vector("list", m_block)
-  for(i in 1:m_block){
+  for(i in seq_len(m_block)) {
       R = R_list[[i]]$R
       match_order = match(rownames(b_mat),rownames(R))
       match_order = match_order[!is.na(match_order)]
@@ -96,7 +95,7 @@ Generate_Perturb <- function(b_mat,se_mat,n_vec,rho_mat,DP_mat_list){
 
 Graph_Estimate <- function(b_mat,se_mat,n_vec,rho_mat,IJ_snp_list,t,random_start=10){
   n_trait = length(n_vec)
-  obs_graph = matrix(1,nrow=n_trait,ncol=n_trait)
+  obs_graph = matrix(0,nrow=n_trait,ncol=n_trait)
   obs_graph_pval = obs_graph_se = matrix(0,nrow=n_trait,ncol=n_trait)
   k = 1
   for(i in 1:(n_trait-1)){
