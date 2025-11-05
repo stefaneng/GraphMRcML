@@ -95,7 +95,7 @@ Generate_Perturb <- function(b_mat,se_mat,n_vec,rho_mat,DP_mat_list){
 
 Graph_Estimate <- function(b_mat,se_mat,n_vec,rho_mat,IJ_snp_list,t,random_start=10){
   n_trait = length(n_vec)
-  obs_graph = matrix(1,nrow=n_trait,ncol=n_trait)
+  obs_graph = matrix(0,nrow=n_trait,ncol=n_trait)
   obs_graph_pval = obs_graph_se = matrix(0,nrow=n_trait,ncol=n_trait)
   k = 1
   for(i in 1:(n_trait-1)){
